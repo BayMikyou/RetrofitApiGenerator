@@ -1,0 +1,29 @@
+<idea-plugin>
+    <id>com.shanbay.plugins.retrofit.api.generator</id>
+    <name>RetrofitApiGenerator</name>
+    <version>1.0</version>
+    <vendor email="android@shanbay.com" url="http://www.shanbay.com">扇贝网</vendor>
+
+    <description><![CDATA[
+      Enter short description for your plugin here.<br>
+      <em>most HTML tags may be used</em>
+    ]]></description>
+
+    <change-notes><![CDATA[
+      Add change notes here.<br>
+      <em>most HTML tags may be used</em>
+    ]]>
+    </change-notes>
+
+    <idea-version since-build="145.0"/>
+    <depends>com.intellij.modules.lang</depends>
+    <extensions defaultExtensionNs="com.intellij"/>
+
+    <actions>
+        <action class="com.mikyou.retrofit.api.generator.action.RetrofitApiGeneratorAction" id="RetrofitApiGenerator"
+                text="Retrofit Api Generator" description="Retrofit Api Generator" popup="true">
+            <add-to-group group-id="GenerateGroup" anchor="after" relative-to-action="JavaGenerateGroup2"/>
+        </action>
+    </actions>
+
+</idea-plugin>
