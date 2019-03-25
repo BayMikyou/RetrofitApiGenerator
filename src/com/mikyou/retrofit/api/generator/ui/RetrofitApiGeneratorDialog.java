@@ -4,14 +4,14 @@ import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.mikyou.retrofit.api.generator.ext.ExtGUIKt;
 import com.mikyou.retrofit.api.generator.ui.adapter.TableAdapter;
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataGeneratorType;
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataParams;
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataResponse;
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApi;
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApiWrapper;
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataSupportLanguage;
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataSupportLibrary;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -240,7 +240,7 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 		ViewDataSupportLibrary supportLibrary = getSupportLibrary();
 
 		ViewDataRetrofitApi retrofitApi = new ViewDataRetrofitApi(requestMethod, requestUrl, isFormUrlEncoded, headerParams,
-				requestBodyParams, queryParams, fieldParams, paths, response, methodName, supportLanguage, supportLibrary);
+				requestBodyParams, queryParams, fieldParams, paths, "", response, methodName, supportLanguage, supportLibrary);
 
 		mViewDataRetrofitApiList.add(retrofitApi);
 		refreshRetrofitApiListView();
@@ -501,8 +501,18 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 	}
 
 	private void generateClicked() {
-		if (mApiGenerateCallback != null) {
-			mApiGenerateCallback.onGenerateClicked(mViewDataRetrofitApiList);
+		if (mApiGenerateCallback != null && !mViewDataRetrofitApiList.isEmpty()) {
+			ViewDataRetrofitApi viewDataRetrofitApi = mViewDataRetrofitApiList.get(0);
+			ViewDataSupportLanguage supportLanguage = viewDataRetrofitApi.getSupportLanguage();
+			ViewDataSupportLibrary supportLibrary = viewDataRetrofitApi.getSupportLibrary();
+			ViewDataGeneratorType generatorType = ViewDataGeneratorType.KOTLIN_RXJAVA;
+			if (supportLanguage == ViewDataSupportLanguage.LANGUAGE_KOTLIN && supportLibrary == ViewDataSupportLibrary.LIBRARY_COROUTINE) {
+				generatorType = ViewDataGeneratorType.KOTLIN_COROUTINE;
+			} else if (supportLanguage == ViewDataSupportLanguage.LANGUAGE_JAVA) {
+				generatorType = ViewDataGeneratorType.JAVA_RXJAVA;
+			}
+
+			mApiGenerateCallback.onGenerateClicked(new ViewDataRetrofitApiWrapper(mViewDataRetrofitApiList, generatorType));
 		}
 	}
 
@@ -525,7 +535,7 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 	}
 
 	public interface RetrofitApiGenerateCallback {
-		void onGenerateClicked(@Nonnull List<ViewDataRetrofitApi> viewDataRetrofitApis);
+		void onGenerateClicked(@Nonnull ViewDataRetrofitApiWrapper retrofitApisWrapper);
 
 		void onCancelClicked();
 	}

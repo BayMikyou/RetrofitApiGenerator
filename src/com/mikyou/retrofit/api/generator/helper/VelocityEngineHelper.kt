@@ -1,6 +1,7 @@
 package com.mikyou.retrofit.api.generator.helper
 
 import com.intellij.openapi.util.io.FileUtil
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApi
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.runtime.RuntimeConstants
@@ -19,11 +20,10 @@ object VelocityEngineHelper {
         }
     }
 
-    fun evaluate(map: Map<String, String>): String {
-        val velocityTemplate: String = FileUtil.loadTextAndClose(this::class.java.getResourceAsStream("/template/retrofit_api.vm"))
-        println("VelocityEngineHelper: velocityTemplate is $velocityTemplate")
+    fun evaluate(retrofitApiList: List<ViewDataRetrofitApi>, templatePath: String): String {
+        val velocityTemplate: String = FileUtil.loadTextAndClose(this::class.java.getResourceAsStream(templatePath))
         val velocityContext = VelocityContext().apply {
-            put("actionParamMap", map)
+            put("retrofitApiList", retrofitApiList)
         }
         val sWriter = StringWriter()
         mVelocityEngine.evaluate(velocityContext, sWriter, "", velocityTemplate)

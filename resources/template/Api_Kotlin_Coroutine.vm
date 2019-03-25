@@ -1,0 +1,8 @@
+#foreach(${retrofitApi} in ${retrofitApiList})
+#if(${retrofitApi.isFormUrlEncoded})
+    @FormUrlEncoded
+#end
+    @${retrofitApi.requestMethod}(value = "${retrofitApi.requestUrl}")
+    fun ${retrofitApi.methodName}(${retrofitApi.paramsString}): Deffered<${retrofitApi.response.modelName}>
+
+#end

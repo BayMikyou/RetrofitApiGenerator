@@ -22,6 +22,12 @@ enum class ViewDataSupportLibrary {
     LIBRARY_COROUTINE
 }
 
+enum class ViewDataGeneratorType {
+    KOTLIN_RXJAVA,
+    KOTLIN_COROUTINE,
+    JAVA_RXJAVA
+}
+
 data class ViewDataRetrofitApi(
         val requestMethod: String,
         val requestUrl: String,
@@ -31,8 +37,14 @@ data class ViewDataRetrofitApi(
         val queryParams: List<ViewDataParams>,
         val fieldParams: List<ViewDataParams>,
         val paths: Set<String>,
+        var paramsString: String,
         val response: ViewDataResponse,
         val methodName: String,
         val supportLanguage: ViewDataSupportLanguage,
         val supportLibrary: ViewDataSupportLibrary
+)
+
+data class ViewDataRetrofitApiWrapper(
+        val viewDataRetrofitApis: List<ViewDataRetrofitApi>,
+        val generatorType: ViewDataGeneratorType
 )

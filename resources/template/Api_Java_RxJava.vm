@@ -1,0 +1,8 @@
+#foreach(${retrofitApi} in ${retrofitApiList})
+#if(${retrofitApi.isFormUrlEncoded})
+    @FormUrlEncoded
+#end
+    @${retrofitApi.requestMethod}("${retrofitApi.requestUrl}")
+    Observable<${retrofitApi.response.modelName}> ${retrofitApi.methodName}(${retrofitApi.paramsString});
+
+#end
