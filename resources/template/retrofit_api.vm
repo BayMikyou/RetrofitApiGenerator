@@ -1,0 +1,3 @@
+    @FormUrlEncoded
+    @PUT("api/v1/bdc/learning/{learn_id}/")
+    Observable<SBResponse<JsonElement>> updateCollinsDefinition(@Path("learn_id") long learnId, @Field("sense") long senseId);

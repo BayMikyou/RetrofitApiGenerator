@@ -1,0 +1,38 @@
+package com.mikyou.retrofit.api.generator.ui.model
+
+
+data class ViewDataParams(
+        val paramName: String,
+        val paramType: String
+)
+
+data class ViewDataResponse(
+        val modelName: String,
+        val isList: Boolean,
+        val modelJson: String
+)
+
+enum class ViewDataSupportLanguage {
+    LANGUAGE_KOTLIN,
+    LANGUAGE_JAVA
+}
+
+enum class ViewDataSupportLibrary {
+    LIBRARY_RXJAVA,
+    LIBRARY_COROUTINE
+}
+
+data class ViewDataRetrofitApi(
+        val requestMethod: String,
+        val requestUrl: String,
+        val isFormUrlEncoded: Boolean,
+        val headerParams: List<ViewDataParams>,
+        val requestBodyParams: List<ViewDataParams>,
+        val queryParams: List<ViewDataParams>,
+        val fieldParams: List<ViewDataParams>,
+        val paths: Set<String>,
+        val response: ViewDataResponse,
+        val methodName: String,
+        val supportLanguage: ViewDataSupportLanguage,
+        val supportLibrary: ViewDataSupportLibrary
+)

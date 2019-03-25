@@ -45,4 +45,9 @@ class TableAdapter(columnNames: List<String>) : AbstractTableModel() {
         mDataList.removeAt(rowDataIndex)
         fireTableRowsDeleted(rowDataIndex, rowDataIndex)
     }
+
+    fun clearAll() {
+        mDataList.clear()
+        fireTableDataChanged()
+    }
 }
