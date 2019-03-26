@@ -6,7 +6,7 @@ import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApi
 
 class KotlinRxJavaGenerator : IGenerator {
     override fun evaluate(retrofitApiList: List<ViewDataRetrofitApi>): String {
-        return VelocityEngineHelper.evaluate(composeParams(retrofitApiList), templatePath = "/template/Api_Kotlin_RxJava.vm")
+        return VelocityEngineHelper.evaluate(composeParams(retrofitApiList), templatePath = "/template/api/Api_Kotlin_RxJava.vm")
     }
 
     private fun composeParams(retrofitApiList: List<ViewDataRetrofitApi>): List<ViewDataRetrofitApi> {
@@ -39,8 +39,8 @@ class KotlinRxJavaGenerator : IGenerator {
         }
 
         val resultTrim = stringBuilder.toString().trim()
-        if (resultTrim.isNotBlank() && resultTrim.last() == ',' && resultTrim.length > 2) {
-            return resultTrim.substring(0, resultTrim.length - 2)
+        if (resultTrim.isNotBlank() && resultTrim.last() == ',' && resultTrim.length > 1) {
+            return resultTrim.substring(0, resultTrim.length - 1)
         }
 
         return resultTrim
