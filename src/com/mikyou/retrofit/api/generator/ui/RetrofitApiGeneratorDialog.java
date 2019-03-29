@@ -3,6 +3,7 @@ package com.mikyou.retrofit.api.generator.ui;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.table.JBTable;
 import com.mikyou.retrofit.api.generator.ext.ExtGUIKt;
+import com.mikyou.retrofit.api.generator.helper.JsonParserHelper;
 import com.mikyou.retrofit.api.generator.ui.adapter.TableAdapter;
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataGeneratorType;
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataParams;
@@ -234,7 +235,7 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 		List<ViewDataParams> queryParams = buildParamsFromTable(mAdapterTableQueryParam);
 		List<ViewDataParams> fieldParams = buildParamsFromTable(mAdapterTableFieldParam);
 		Set<String> paths = getUrlPaths(requestUrl);
-		ViewDataResponse response = new ViewDataResponse(mTxtFieldModelName.getText(), mRadioBtnIsList.isSelected(), mTxtAreaModelJson.getText());
+		ViewDataResponse response = new ViewDataResponse(mTxtFieldModelName.getText(), mRadioBtnIsList.isSelected(), mTxtAreaModelJson.getText(), new ArrayList<>());
 		String methodName = getMethodName();
 		ViewDataSupportLanguage supportLanguage = getSupportLanguage();
 		ViewDataSupportLibrary supportLibrary = getSupportLibrary();
@@ -524,6 +525,30 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 
 	public static void main(String[] args) {
 		RetrofitApiGeneratorDialog dialog = new RetrofitApiGeneratorDialog();
+		dialog.setRetrofitApiGenerateCallback(new RetrofitApiGenerateCallback() {
+			@Override
+			public void onGenerateClicked(@Nonnull ViewDataRetrofitApiWrapper retrofitApisWrapper) {
+				JsonParserHelper parserHelper = new JsonParserHelper();
+				String json = retrofitApisWrapper.getViewDataRetrofitApis().get(0).getResponse().getModelJson();
+				String modelName = retrofitApisWrapper.getViewDataRetrofitApis().get(0).getResponse().getModelName();
+				parserHelper.parse(json, modelName, new JsonParserHelper.ParseListener() {
+					@Override
+					public void onParseComplete(String str) {
+						System.out.println(str);
+					}
+
+					@Override
+					public void onParseError(Exception e) {
+
+					}
+				});
+			}
+
+			@Override
+			public void onCancelClicked() {
+
+			}
+		});
 		ExtGUIKt.showDialog(dialog, 650, 700, true, false);
 		System.exit(0);
 	}

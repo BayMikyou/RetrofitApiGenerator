@@ -9,7 +9,14 @@ data class ViewDataParams(
 data class ViewDataResponse(
         val modelName: String,
         val isList: Boolean,
-        val modelJson: String
+        val modelJson: String,
+        val modelClassList: MutableList<ViewDataModelClass>
+)
+
+data class ViewDataModelClass(
+        val className: String,
+        val modelParams: MutableList<ViewDataParams> = mutableListOf(),
+        var modelParamsString: String = ""
 )
 
 enum class ViewDataSupportLanguage {
