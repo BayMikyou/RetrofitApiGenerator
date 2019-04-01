@@ -53,5 +53,6 @@ data class ViewDataRetrofitApi(
 
 data class ViewDataRetrofitApiWrapper(
         val viewDataRetrofitApis: List<ViewDataRetrofitApi>,
+        val interfaceName: String,
         val generatorType: ViewDataGeneratorType
 )

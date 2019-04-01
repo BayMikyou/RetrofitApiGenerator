@@ -1,0 +1,13 @@
+import retrofit2.*
+import rx.Observable
+
+interface ${retrofitApiWrapper.interfaceName} {
+#foreach(${retrofitApi} in ${retrofitApiWrapper.viewDataRetrofitApis})
+#if(${retrofitApi.isFormUrlEncoded})
+    @FormUrlEncoded
+#end
+    @${retrofitApi.requestMethod}(value = "${retrofitApi.requestUrl}")
+    fun ${retrofitApi.methodName}(${retrofitApi.paramsString}): Observable<${retrofitApi.response.modelName}>
+
+#end
+}

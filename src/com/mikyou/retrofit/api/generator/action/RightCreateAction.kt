@@ -14,16 +14,19 @@ import com.mikyou.retrofit.api.generator.platform.JavaRxJavaGenerator
 import com.mikyou.retrofit.api.generator.platform.KotlinCoroutineGenerator
 import com.mikyou.retrofit.api.generator.platform.KotlinRxJavaGenerator
 import com.mikyou.retrofit.api.generator.ui.RetrofitApiGeneratorDialog
-import com.mikyou.retrofit.api.generator.ui.model.*
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataGeneratorType
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataModelClass
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApi
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApiWrapper
 
-class RetrofitApiGeneratorAction : AnAction() {
+class RightCreateAction : AnAction() {
     private lateinit var mGenerator: IGenerator
     override fun actionPerformed(event: AnActionEvent?) {
         if (event == null || event.project == null) {
             return
         }
         VelocityEngineHelper.initEngine()
-        val retrofitApiGeneratorDialog = RetrofitApiGeneratorDialog(false)
+        val retrofitApiGeneratorDialog = RetrofitApiGeneratorDialog(true)
         retrofitApiGeneratorDialog.setRetrofitApiGenerateCallback(object : RetrofitApiGeneratorDialog.RetrofitApiGenerateCallback {
             override fun onGenerateClicked(retrofitApisWrapper: ViewDataRetrofitApiWrapper) {
                 generateCode(event, retrofitApisWrapper)
@@ -40,16 +43,13 @@ class RetrofitApiGeneratorAction : AnAction() {
 
     private fun generateCode(event: AnActionEvent, retrofitApisWrapper: ViewDataRetrofitApiWrapper) {
         mGenerator = getPlatformGenerator(retrofitApisWrapper.generatorType)
-        val generateApiCode: String = mGenerator.evaluateApi(retrofitApisWrapper.viewDataRetrofitApis)
-        val editor: Editor? = event.dataContext.getData(DataKeys.EDITOR)
-        if (editor != null) {
-            try {
-                InsertCodeHelper.doInsert(generateApiCode, editor)
-                println("generated code is succeed, generated code is :\n $generateApiCode")
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+        try {
+            val exportPath = getInterfaceExportPath(event, retrofitApisWrapper.interfaceName)
+            mGenerator.evaluateInterfaceApi(event, retrofitApisWrapper, exportPath)
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
+
         try {
             generateModelCode(event, retrofitApisWrapper.viewDataRetrofitApis)
         } catch (e: Exception) {
@@ -84,8 +84,25 @@ class RetrofitApiGeneratorAction : AnAction() {
     }
 
     private fun getModelExportPath(event: AnActionEvent, modelClassName: String): String {
-        val parentPath = (DataKeys.VIRTUAL_FILE.getData(event.dataContext) as VirtualFile).parent.path
+        val selectedVirtualFile = (DataKeys.VIRTUAL_FILE.getData(event.dataContext) as VirtualFile)
+        val parentPath = if (selectedVirtualFile.isDirectory) {
+            selectedVirtualFile.path
+        } else {
+            selectedVirtualFile.parent.path
+        }
+
         return "$parentPath/model/$modelClassName.${mGenerator.getFileSuffix()}"
+    }
+
+    private fun getInterfaceExportPath(event: AnActionEvent, interfaceClassName: String): String {
+        val selectedVirtualFile = (DataKeys.VIRTUAL_FILE.getData(event.dataContext) as VirtualFile)
+        val parentPath = if (selectedVirtualFile.isDirectory) {
+            selectedVirtualFile.path
+        } else {
+            selectedVirtualFile.parent.path
+        }
+
+        return "$parentPath/$interfaceClassName.${mGenerator.getFileSuffix()}"
     }
 
     private fun getPlatformGenerator(generatorType: ViewDataGeneratorType): IGenerator {

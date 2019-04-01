@@ -33,6 +33,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
@@ -76,6 +77,8 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 	private JTextField mTxtFieldMethodName;
 	private JPanel mPanelMethodName;
 	private JCheckBox mCheckBoxCustomMethod;
+	private JTextField mTxtFieldInterface;
+	private JLabel mLabelInterface;
 	private JBTable mTableHeader;
 	private JBTable mTableRequestBody;
 	private JBTable mTableQueryParam;
@@ -104,22 +107,39 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 
 	private List<ViewDataRetrofitApi> mViewDataRetrofitApiList = new ArrayList<>();
 	private int[] mSelectedIndexArray;
+	private boolean mIsGenerateInterfaceName = false;
 
 	public RetrofitApiGeneratorDialog() {
 		setContentPane(contentPane);
 		setModal(true);
 		getRootPane().setDefaultButton(mBtnGenerate);
+	}
+
+	public RetrofitApiGeneratorDialog(boolean isGenerateInterfaceName) {
+		this();
+		mIsGenerateInterfaceName = isGenerateInterfaceName;
 		initViews();
 		registerEvents();
 	}
 
 	private void initViews() {
+		initInterfaceView();
 		initFormDataRadioBtnGroup();
 		initTabsPanel();
 		initTables();
 		refreshCBoxLibs(Objects.requireNonNull(mCBoxLanguage.getSelectedItem()).toString());
 		mPanelMethodName.setVisible(false);
 		mViewDataRetrofitApiList.clear();
+	}
+
+	private void initInterfaceView() {
+		if (mIsGenerateInterfaceName) {
+			mLabelInterface.setVisible(true);
+			mTxtFieldInterface.setVisible(true);
+		} else {
+			mLabelInterface.setVisible(false);
+			mTxtFieldInterface.setVisible(false);
+		}
 	}
 
 	private void initTables() {
@@ -513,7 +533,7 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 				generatorType = ViewDataGeneratorType.JAVA_RXJAVA;
 			}
 
-			mApiGenerateCallback.onGenerateClicked(new ViewDataRetrofitApiWrapper(mViewDataRetrofitApiList, generatorType));
+			mApiGenerateCallback.onGenerateClicked(new ViewDataRetrofitApiWrapper(mViewDataRetrofitApiList, mTxtFieldInterface.getText(), generatorType));
 		}
 	}
 
@@ -524,7 +544,7 @@ public class RetrofitApiGeneratorDialog extends JDialog {
 	}
 
 	public static void main(String[] args) {
-		RetrofitApiGeneratorDialog dialog = new RetrofitApiGeneratorDialog();
+		RetrofitApiGeneratorDialog dialog = new RetrofitApiGeneratorDialog(true);
 		dialog.setRetrofitApiGenerateCallback(new RetrofitApiGenerateCallback() {
 			@Override
 			public void onGenerateClicked(@Nonnull ViewDataRetrofitApiWrapper retrofitApisWrapper) {

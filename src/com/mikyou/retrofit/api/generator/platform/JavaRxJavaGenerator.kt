@@ -7,10 +7,15 @@ import com.mikyou.retrofit.api.generator.helper.VelocityEngineHelper
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataModelClass
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataParams
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApi
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApiWrapper
 import org.json.JSONArray
 import org.json.JSONObject
 
 class JavaRxJavaGenerator : IGenerator {
+    override fun evaluateInterfaceApi(anActionEvent: AnActionEvent, retrofitApiWrapper: ViewDataRetrofitApiWrapper, exportPath: String) {
+        VelocityEngineHelper.evaluateToInterfaceFile(anActionEvent, retrofitApiWrapper, PATH_TEMPLATE_INTERFACE_API, exportPath)
+    }
+
     override fun evaluateModel(anActionEvent: AnActionEvent, retrofitApi: ViewDataRetrofitApi, exportPath: String) {
         VelocityEngineHelper.evaluateToFile(anActionEvent, retrofitApi, PATH_TEMPLATE_MODEL, exportPath)
     }
@@ -85,7 +90,8 @@ class JavaRxJavaGenerator : IGenerator {
     }
 
     companion object {
-        private const val PATH_TEMPLATE_MODEL: String = "/template/model/Model_Java.vm"
-        private const val PATH_TEMPLATE_API: String = "/template/api/Api_Java_RxJava.vm"
+        private const val PATH_TEMPLATE_MODEL: String = "/template/model/model_java.vm"
+        private const val PATH_TEMPLATE_API: String = "/template/api/api_java_rxjava.vm"
+        private const val PATH_TEMPLATE_INTERFACE_API: String = "/template/api/api_interface_java_rxjava.vm"
     }
 }

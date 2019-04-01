@@ -24,6 +24,12 @@
                 text="Retrofit Api Generator" description="Retrofit Api Generator" popup="true">
             <add-to-group group-id="GenerateGroup" anchor="after" relative-to-action="JavaGenerateGroup2"/>
         </action>
+        <action id="RightCreateAction"
+            class="com.mikyou.retrofit.api.generator.action.RightCreateAction" text="Create Retrofit Api"
+            description="Create Retrofit Api">
+            <add-to-group group-id="ProjectViewPopupMenu" anchor="after" relative-to-action="ReplaceInPath"/>
+        </action>
     </actions>
+
 
 </idea-plugin>

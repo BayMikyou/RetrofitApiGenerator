@@ -8,6 +8,7 @@ import com.intellij.psi.PsiElementFactory
 import com.intellij.psi.codeStyle.CodeStyleManager
 import com.mikyou.retrofit.api.generator.action.CreateFileAction
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApi
+import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApiWrapper
 import org.apache.velocity.VelocityContext
 import org.apache.velocity.app.VelocityEngine
 import org.apache.velocity.runtime.RuntimeConstants
@@ -34,6 +35,18 @@ object VelocityEngineHelper {
         val sWriter = StringWriter()
         mVelocityEngine.evaluate(velocityContext, sWriter, "", velocityTemplate)
         return sWriter.toString()
+    }
+
+    fun evaluateToInterfaceFile(anActionEvent: AnActionEvent, retrofitApiWrapper: ViewDataRetrofitApiWrapper, templatePath: String, exportPath: String) {
+        if (templatePath.isBlank() || exportPath.isBlank()) {
+            return
+        }
+        val velocityTemplate: String = FileUtil.loadTextAndClose(this::class.java.getResourceAsStream(templatePath))
+        val velocityContext = VelocityContext().apply {
+            put("retrofitApiWrapper", retrofitApiWrapper)
+        }
+
+        mergeToFile(anActionEvent, velocityTemplate, velocityContext, exportPath)
     }
 
     fun evaluateToFile(anActionEvent: AnActionEvent, viewDataRetrofitApi: ViewDataRetrofitApi, templatePath: String, exportPath: String) {
