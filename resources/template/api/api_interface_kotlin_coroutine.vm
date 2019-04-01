@@ -1,4 +1,4 @@
-import retrofit2.*
+import retrofit2.http.*
 import kotlinx.coroutines.Deferred
 
 interface ${retrofitApiWrapper.interfaceName} {

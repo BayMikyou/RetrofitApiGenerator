@@ -19,7 +19,7 @@ import com.mikyou.retrofit.api.generator.ui.model.ViewDataModelClass
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApi
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApiWrapper
 
-class RightCreateAction : AnAction() {
+class RightGenerateAction : AnAction() {
     private lateinit var mGenerator: IGenerator
     override fun actionPerformed(event: AnActionEvent?) {
         if (event == null || event.project == null) {
