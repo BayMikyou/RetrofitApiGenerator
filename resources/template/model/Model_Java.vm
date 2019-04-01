@@ -3,7 +3,7 @@ import android.support.annotation.Keep
 #foreach(${modelClass} in ${retrofitApi.response.modelClassList})
 @Keep
 class ${modelClass.className} {
-    ${modelClass.modelParamsString}
+${modelClass.modelParamsString}
 }
 
 #end

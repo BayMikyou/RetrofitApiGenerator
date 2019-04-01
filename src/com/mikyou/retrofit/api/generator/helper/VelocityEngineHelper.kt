@@ -3,6 +3,9 @@ package com.mikyou.retrofit.api.generator.helper
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.io.FileUtil
+import com.intellij.psi.PsiElement
+import com.intellij.psi.PsiElementFactory
+import com.intellij.psi.codeStyle.CodeStyleManager
 import com.mikyou.retrofit.api.generator.action.CreateFileAction
 import com.mikyou.retrofit.api.generator.ui.model.ViewDataRetrofitApi
 import org.apache.velocity.VelocityContext

@@ -6,6 +6,9 @@ fun String.underlineToCamel(): String {
     }
 
     val params = split("_")
+    if (params.size <= 1) {
+        return this
+    }
     val stringBuilder = StringBuilder()
     params.forEachIndexed { index, param ->
         if (index == 0) {

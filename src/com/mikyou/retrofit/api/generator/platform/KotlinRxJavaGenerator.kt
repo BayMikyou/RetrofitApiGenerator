@@ -45,7 +45,7 @@ class KotlinRxJavaGenerator : IGenerator {
 
 
     override fun composeModelParamsString(modelParams: MutableList<ViewDataParams>): String {
-        return modelParams.joinToString(separator = ",\n") { "val ${it.paramName}: ${it.paramType}" }
+        return modelParams.joinToString(separator = ",\n") { "        val ${it.paramName}: ${it.paramType}" }
     }
 
     private fun composeParams(retrofitApiList: List<ViewDataRetrofitApi>): List<ViewDataRetrofitApi> {
